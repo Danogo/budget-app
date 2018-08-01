@@ -24,6 +24,28 @@ const budgetModel = (function () {
     }
   };
 
+  return {
+    addItem: function(type, des, val) {
+      let newItem, ID;
+      // create new ID, which is equal to lastID + 1
+      if (data.allItems[type].length > 0) {
+        ID = data.allItems[type][data.allItems[type].length - 1].id + 1;
+      } else {
+        ID = 0;
+      }
+      // create new item based on 'inc' or 'exp' type
+      if (type = 'inc') {
+        newItem = new Income(ID, des, val);
+      } else if(type = 'exp') {
+        newItem = new Expense(ID, des, val)
+      }
+      // add new created item to array
+      data.allItems[type].push(newItem);
+      // return new created item so it can be used outside model
+      return newItem;
+    }
+  }
+
 })();
 
 // VIEW
@@ -68,9 +90,11 @@ const budgetController = (function (budgetData, budgetUI) {
   };
   // Adding new item
   const ctrlAddItem = function () {
+    let input, newItem
     // Get data from input fields
-    let input = budgetUI.getInput();
-    console.log(input);
+    input = budgetUI.getInput();
+    // Add new item to data structure in model
+    newItem = budgetModel.addItem(input.type, input.description, input.value);
   };
 
   return {
