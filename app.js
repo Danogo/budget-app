@@ -1,5 +1,28 @@
 // MODEL
 const budgetModel = (function () {
+  // Function constructor for expenses
+  const Expense = function (id, description, value) {
+    this.id = id;
+    this.description = description;
+    this.value = value;
+  };
+  // Function constructor for incomes
+  const Income = function (id, description, value) {
+    this.id = id;
+    this.description = description;
+    this.value = value;
+  };
+  // Data about budget
+  const data = {
+    allItems: {
+      exp: [],
+      inc: []
+    },
+    totals: {
+      exp: 0,
+      inc: 0
+    }
+  };
 
 })();
 
@@ -52,7 +75,7 @@ const budgetController = (function (budgetData, budgetUI) {
 
   return {
     // Function to initialize whole application
-    init: function() {
+    init: function () {
       console.log('Application has started');
       setupEventListeners();
     }
