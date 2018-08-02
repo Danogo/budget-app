@@ -88,6 +88,13 @@ const budgetView = (function () {
       htmlEl = htmlEl.replace('%value%', obj.value);
       // Insert prepared html element into DOM
       document.querySelector(selector).insertAdjacentHTML('beforeend', htmlEl);
+    },
+    clearFields: function() {
+      let fields = document.querySelectorAll(`${DOMselectors.inputDescription}, ${DOMselectors.inputValue}`);
+      Array.prototype.forEach.call(fields, function(input) {
+        input.value = '';
+      });
+      fields[0].focus();
     }
   };
 })();
@@ -111,10 +118,14 @@ const budgetController = (function (budgetData, budgetUI) {
     let input, newItem
     // Get data from input fields
     input = budgetUI.getInput();
-    // Add new item to data structure in model
-    newItem = budgetModel.addItem(input.type, input.description, input.value);
-    // Add item to UI
-    budgetUI.addListItem(newItem, input.type);
+    if (input.description !== '' && input.value !== '') {
+      // Add new item to data structure in model
+      newItem = budgetModel.addItem(input.type, input.description, input.value);
+      // Add item to UI
+      budgetUI.addListItem(newItem, input.type);
+      // Clear input fields
+      budgetUI.clearFields();
+    }
   };
 
   return {
