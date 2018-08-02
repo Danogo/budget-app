@@ -50,13 +50,14 @@ const budgetModel = (function () {
 
 // VIEW
 const budgetView = (function () {
-
   // Strings for DOM selectors
   const DOMselectors = {
     inputType: '.add__type',
     inputDescription: '.add__description',
     inputValue: '.add__value',
-    inputBtn: '.add__btn'
+    inputBtn: '.add__btn',
+    expensesList: '.expenses__list',
+    incomeList: '.income__list'
   }
 
   // Exposed public object
@@ -70,6 +71,23 @@ const budgetView = (function () {
     },
     getDOMselectors: function () {
       return DOMselectors;
+    },
+    addListItem: function(obj, type) {
+      // Create html string for item div
+      let html, htmlEl, selector;
+      if (type === 'inc') {
+        selector = DOMselectors.incomeList;
+        html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+      } else if(type === 'exp') {
+        selector = DOMselectors.expensesList;
+        html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">10%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+      }
+      // insert data from obj to item html string
+      htmlEl = html.replace('%id%', obj.id);
+      htmlEl = htmlEl.replace('%description%', obj.description);
+      htmlEl = htmlEl.replace('%value%', obj.value);
+      // Insert prepared html element into DOM
+      document.querySelector(selector).insertAdjacentHTML('beforeend', htmlEl);
     }
   };
 })();
@@ -82,7 +100,7 @@ const budgetController = (function (budgetData, budgetUI) {
     const DOMs = budgetUI.getDOMselectors();
     // Event handlers
     document.querySelector(DOMs.inputBtn).addEventListener('click', ctrlAddItem);
-    document.querySelector(DOMs.inputDescription).addEventListener('keypress', function (event) {
+    document.querySelector(DOMs.inputValue).addEventListener('keypress', function (event) {
       if (event.key === 'Enter' || event.keyCode === 13) {
         ctrlAddItem();
       }
@@ -95,6 +113,8 @@ const budgetController = (function (budgetData, budgetUI) {
     input = budgetUI.getInput();
     // Add new item to data structure in model
     newItem = budgetModel.addItem(input.type, input.description, input.value);
+    // Add item to UI
+    budgetUI.addListItem(newItem, input.type);
   };
 
   return {
