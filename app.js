@@ -118,7 +118,7 @@ const budgetController = (function (budgetData, budgetUI) {
     let input, newItem
     // Get data from input fields
     input = budgetUI.getInput();
-    if (input.description !== '' && !isNaN(input.value) && input.value !== 0) {
+    if (input.description.replace(/\s/g, "").length  && !isNaN(input.value) && input.value !== 0) {
       // Add new item to data structure in model
       newItem = budgetModel.addItem(input.type, input.description, input.value);
       // Add item to UI
