@@ -29,7 +29,7 @@ const budgetModel = (function () {
     totals: {
       exp: 0,
       inc: 0
-    }, 
+    },
     budget: 0,
     percentage: -1
   };
@@ -178,18 +178,33 @@ const budgetController = (function (budgetData, budgetUI) {
   // Deleting item
   const ctrlDeleteItem = function (event) {
     let target = event.target;
-    if (target.parentNode.tagName === 'BUTTON') {
+    if (target.classList.contains('item__delete--btn') || target.parentNode.classList.contains('item__delete--btn')) {
       let itemID, splitID, type, ID;
-      itemId = target.parentNode.parentNode.parentNode.parentNode.id;
-      splitID = itemId.split('-');
+      re = /exp-\d+|inc-\d+/ //matches inc-xx or exp-xx
+
+      function findParentWithID(el) {
+        while (!re.test(el.id)) {
+          el = el.parentNode;
+          if (el === document) {
+            break;
+          }
+        }
+        return el.id;
+      }
+      
+      itemID = findParentWithID(target);
+      splitID = itemID.split('-');
       type = splitID[0];
       ID = splitID[1];
+
       // 1. Delete item from data structure
 
       // 2. Delete item from the UI
 
       // 3. Update new budget
     }
+
+
   }
   // Update budget
   const updateBudget = function () {
