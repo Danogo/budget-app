@@ -66,7 +66,7 @@ const budgetView = (function () {
       return {
         type: document.querySelector(DOMselectors.inputType).value,
         description: document.querySelector(DOMselectors.inputDescription).value,
-        value: document.querySelector(DOMselectors.inputValue).value
+        value: Math.abs(parseFloat(document.querySelector(DOMselectors.inputValue).value))  
       }
     },
     getDOMselectors: function () {
@@ -118,15 +118,21 @@ const budgetController = (function (budgetData, budgetUI) {
     let input, newItem
     // Get data from input fields
     input = budgetUI.getInput();
-    if (input.description !== '' && input.value !== '') {
+    if (input.description !== '' && !isNaN(input.value) && input.value !== 0) {
       // Add new item to data structure in model
       newItem = budgetModel.addItem(input.type, input.description, input.value);
       // Add item to UI
       budgetUI.addListItem(newItem, input.type);
       // Clear input fields
       budgetUI.clearFields();
+      // Calculate and update budget
+      updateBudget();
     }
   };
+
+  const updateBudget = function () {
+
+  }
 
   return {
     // Function to initialize whole application
