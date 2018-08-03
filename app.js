@@ -15,8 +15,8 @@ const budgetModel = (function () {
   // Function to calculate total incom or expenses
   const calculateTotal = function (type) {
     let sum = 0;
-    data.allItems[type].forEach(function (income) {
-      sum += income.value;
+    data.allItems[type].forEach(function (obj) {
+      sum += obj.value;
     });
     data.totals[type] = sum;
   }
@@ -52,7 +52,20 @@ const budgetModel = (function () {
       // add new created item to array
       data.allItems[type].push(newItem);
       // return new created item so it can be used outside model
+      console.log(data);
       return newItem;
+    },
+    deleteItem: function (type, id) {
+      let ids, index;
+      ids = data.allItems[type].map(function (obj) {
+        return obj.id;
+      });
+      index = ids.indexOf(id);
+      // if element with provided id exist in data
+      if (index !== -1) {
+        data.allItems[type].splice(index, 1);
+      }
+      console.log(data);
     },
     calculateBudget: function () {
       // Calculate total income and expenses
@@ -195,10 +208,10 @@ const budgetController = (function (budgetData, budgetUI) {
       itemID = findParentWithID(target);
       splitID = itemID.split('-');
       type = splitID[0];
-      ID = splitID[1];
+      ID = parseInt(splitID[1]);
 
       // 1. Delete item from data structure
-
+      budgetData.deleteItem(type, ID);
       // 2. Delete item from the UI
 
       // 3. Update new budget
