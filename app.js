@@ -92,7 +92,8 @@ const budgetView = (function () {
     budgetLabel: '.budget__value',
     incomeLabel: '.budget__income--value',
     expensesLabel: '.budget__expenses--value',
-    percentageLabel: '.budget__expenses--percentage'
+    percentageLabel: '.budget__expenses--percentage',
+    container: '.container'
   }
   // Exposed public object
   return {
@@ -111,10 +112,10 @@ const budgetView = (function () {
       let html, htmlEl, selector;
       if (type === 'inc') {
         selector = DOMselectors.incomeList;
-        html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+        html = '<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
       } else if (type === 'exp') {
         selector = DOMselectors.expensesList;
-        html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">10%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+        html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">10%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
       }
       // insert data from obj to item html string
       htmlEl = html.replace('%id%', obj.id);
@@ -156,6 +157,7 @@ const budgetController = (function (budgetData, budgetUI) {
         ctrlAddItem();
       }
     });
+    document.querySelector(DOMs.container).addEventListener('click', ctrlDeleteItem);
   };
   // Adding new item
   const ctrlAddItem = function () {
@@ -173,6 +175,22 @@ const budgetController = (function (budgetData, budgetUI) {
       updateBudget();
     }
   };
+  // Deleting item
+  const ctrlDeleteItem = function (event) {
+    let target = event.target;
+    if (target.parentNode.tagName === 'BUTTON') {
+      let itemID, splitID, type, ID;
+      itemId = target.parentNode.parentNode.parentNode.parentNode.id;
+      splitID = itemId.split('-');
+      type = splitID[0];
+      ID = splitID[1];
+      // 1. Delete item from data structure
+
+      // 2. Delete item from the UI
+
+      // 3. Update new budget
+    }
+  }
   // Update budget
   const updateBudget = function () {
     // 1. Calculate the budget
