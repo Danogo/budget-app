@@ -137,6 +137,10 @@ const budgetView = (function () {
       // Insert prepared html element into DOM
       document.querySelector(selector).insertAdjacentHTML('beforeend', htmlEl);
     },
+    deleteListItem: function (itemID) {
+      let el = document.getElementById(itemID);
+      el.parentNode.removeChild(el);
+    },
     clearFields: function () {
       let fields = document.querySelectorAll(`${DOMselectors.inputDescription}, ${DOMselectors.inputValue}`);
       Array.prototype.forEach.call(fields, function (input) {
@@ -191,10 +195,11 @@ const budgetController = (function (budgetData, budgetUI) {
   // Deleting item
   const ctrlDeleteItem = function (event) {
     let target = event.target;
+    // Selecting proper item using event delegation with fallback for firefox browser
     if (target.classList.contains('item__delete--btn') || target.parentNode.classList.contains('item__delete--btn')) {
       let itemID, splitID, type, ID;
       re = /exp-\d+|inc-\d+/ //matches inc-xx or exp-xx
-
+      // searching for element with 'exp-xx' or 'inc-xx' id
       function findParentWithID(el) {
         while (!re.test(el.id)) {
           el = el.parentNode;
@@ -213,8 +218,9 @@ const budgetController = (function (budgetData, budgetUI) {
       // 1. Delete item from data structure
       budgetData.deleteItem(type, ID);
       // 2. Delete item from the UI
-
+      budgetUI.deleteListItem(itemID);
       // 3. Update new budget
+      updateBudget();
     }
 
 
