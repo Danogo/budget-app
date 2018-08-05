@@ -161,7 +161,15 @@ body {
     margin-left: 10px;
 }
 .red .add__btn {
+    font-size: 35px;
+    background: none;
+    border: none;
     color: #FF5049;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1.1;
+    margin-left: 10px;
 }
 
 
