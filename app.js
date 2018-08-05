@@ -145,13 +145,25 @@ const budgetView = (function () {
     splitNum = num.split('.');
     int = splitNum[0];
     if (int.length > 3) {
-      int = int.substring(0, int.length -3) + ',' + int.substring(int.length - 3)
+      int = insertComma(int);
     }
     dec = splitNum[1];
     // insert appropriate sign
     sign = type === 'exp' ? '-' : '+';
     // return formatted number
     return sign + ' ' + int + '.' + dec;
+  };
+
+  const insertComma = function(num) {
+    num = num.split('');
+    let index = 0;
+    for (let i = num.length - 1; i >= 0; i--) {
+      index++;
+      if (index % 3 === 0) {
+        num.splice(i, 0, ',');
+      }
+    }
+    return num.join('');
   };
 
   // Exposed public object
