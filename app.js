@@ -132,7 +132,8 @@ const budgetView = (function () {
     expensesLabel: '.budget__expenses--value',
     percentageLabel: '.budget__expenses--percentage',
     container: '.container',
-    expPercLabel: '.item__percentage'
+    expPercLabel: '.item__percentage',
+    dateLabel: '.budget__title--date'
   };
   const formatNumber = function (num, type) {
     let spliNum, int, dec, sign;
@@ -153,6 +154,8 @@ const budgetView = (function () {
     // return formatted number
     return sign + ' ' + int + '.' + dec;
   };
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"];
 
   const insertComma = function(num) {
     num = num.split('');
@@ -227,6 +230,14 @@ const budgetView = (function () {
           current.textContent = '---';
         }
       });
+    },
+    displayDate: function () {
+      let now, year, month;
+      now = new Date();
+      year = now.getFullYear();
+      month = now.getMonth();
+      monthName = monthNames[month];
+      document.querySelector(DOMselectors.dateLabel).textContent = monthName + ' ' + year;
     }
   };
 })();
@@ -322,6 +333,7 @@ const budgetController = (function (budgetData, budgetUI) {
     init: function () {
       console.log('Application has started');
       setupEventListeners();
+      budgetUI.displayDate();
     }
   };
 
