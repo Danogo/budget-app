@@ -133,7 +133,27 @@ const budgetView = (function () {
     percentageLabel: '.budget__expenses--percentage',
     container: '.container',
     expPercLabel: '.item__percentage'
-  }
+  };
+  const formatNumber = function (num, type) {
+    let spliNum, int, dec, sign;
+    // get absolute value from num 
+    num = Math.abs(num);
+    // set number to have exactly 2 decimal points
+    num = num.toFixed(2);
+    // insert comma to seperate thousands
+    // split on integer and decimal parts
+    splitNum = num.split('.');
+    int = splitNum[0];
+    if (int.length > 3) {
+      int = int.substring(0, int.length -3) + ',' + int.substring(int.length - 3)
+    }
+    dec = splitNum[1];
+    // insert appropriate sign
+    sign = type === 'exp' ? '-' : '+';
+    // return formatted number
+    return sign + ' ' + int + '.' + dec;
+  };
+
   // Exposed public object
   return {
     getInput: function () {
@@ -159,7 +179,7 @@ const budgetView = (function () {
       // insert data from obj to item html string
       htmlEl = html.replace('%id%', obj.id);
       htmlEl = htmlEl.replace('%description%', obj.description);
-      htmlEl = htmlEl.replace('%value%', obj.value);
+      htmlEl = htmlEl.replace('%value%', formatNumber(obj.value, type));
       // Insert prepared html element into DOM
       document.querySelector(selector).insertAdjacentHTML('beforeend', htmlEl);
     },
@@ -175,9 +195,11 @@ const budgetView = (function () {
       fields[0].focus();
     },
     displayBudget(obj) {
-      document.querySelector(DOMselectors.budgetLabel).textContent = obj.budget;
-      document.querySelector(DOMselectors.incomeLabel).textContent = obj.totalInc;
-      document.querySelector(DOMselectors.expensesLabel).textContent = obj.totalExp;
+      let type;
+      obj.budget > 0 ? type = 'inc' : type = 'exp';
+      document.querySelector(DOMselectors.budgetLabel).textContent = formatNumber(obj.budget, type);
+      document.querySelector(DOMselectors.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc');
+      document.querySelector(DOMselectors.expensesLabel).textContent = formatNumber(obj.totalExp, 'exp');
       if (obj.percentage > 0) {
         document.querySelector(DOMselectors.percentageLabel).textContent = obj.percentage + '%';
       } else {
@@ -287,12 +309,6 @@ const budgetController = (function (budgetData, budgetUI) {
     // Function to initialize whole application
     init: function () {
       console.log('Application has started');
-      budgetUI.displayBudget({
-        budget: 0,
-        totalInc: 0,
-        totalExp: 0,
-        percentage: -1
-      });
       setupEventListeners();
     }
   };
