@@ -77,6 +77,7 @@ const budgetModel = (function () {
       if (data.totals.inc > 0) {
         data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
       } else {
+        // set to -1 if there is no income
         data.percentage = -1;
       }
     },
@@ -190,6 +191,8 @@ const budgetController = (function (budgetData, budgetUI) {
       budgetUI.clearFields();
       // 5. Calculate and update budget
       updateBudget();
+      // 6. Calculate and update percentages
+      updatePercentages();
     }
   };
   // Deleting item
@@ -209,7 +212,7 @@ const budgetController = (function (budgetData, budgetUI) {
         }
         return el.id;
       }
-      
+      // Pull type and id from element which will be deleted
       itemID = findParentWithID(target);
       splitID = itemID.split('-');
       type = splitID[0];
@@ -221,10 +224,10 @@ const budgetController = (function (budgetData, budgetUI) {
       budgetUI.deleteListItem(itemID);
       // 3. Update new budget
       updateBudget();
+      // 4. Calculate and update percentages
+      updatePercentages();
     }
-
-
-  }
+  };
   // Update budget
   const updateBudget = function () {
     // 1. Calculate the budget
@@ -234,7 +237,14 @@ const budgetController = (function (budgetData, budgetUI) {
     // 3. Display budget in the UI
     budgetUI.displayBudget(budgetObj);
   };
+  // Update percentages
+  const updatePercentages = function () {
+    // 1. Calculate percentages
 
+    // 2. Get calculated percentages
+
+    // 3. Display percentages in the UI
+  };
   return {
     // Function to initialize whole application
     init: function () {
