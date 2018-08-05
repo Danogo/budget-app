@@ -133,7 +133,8 @@ const budgetView = (function () {
     percentageLabel: '.budget__expenses--percentage',
     container: '.container',
     expPercLabel: '.item__percentage',
-    dateLabel: '.budget__title--date'
+    dateLabel: '.budget__title--date',
+    addContainerLabel: '.add'
   };
   const formatNumber = function (num, type) {
     let spliNum, int, dec, sign;
@@ -238,6 +239,9 @@ const budgetView = (function () {
       month = now.getMonth();
       monthName = monthNames[month];
       document.querySelector(DOMselectors.dateLabel).textContent = monthName + ' ' + year;
+    },
+    changedType: function () {
+      document.querySelector(DOMselectors.addContainerLabel).classList.toggle('red');
     }
   };
 })();
@@ -256,6 +260,7 @@ const budgetController = (function (budgetData, budgetUI) {
       }
     });
     document.querySelector(DOMs.container).addEventListener('click', ctrlDeleteItem);
+    document.querySelector(DOMs.inputType).addEventListener('change', budgetUI.changedType);
   };
   // Adding new item
   const ctrlAddItem = function () {
